@@ -18,6 +18,8 @@ namespace Matchgame
         DispatcherTimer timer = new DispatcherTimer();
         int tenthsOfSeconds;
         int matchesFound;
+        int lastTime;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -35,11 +37,26 @@ namespace Matchgame
         {
             tenthsOfSeconds++;
             timeTextBlock.Text = (tenthsOfSeconds/10F).ToString("0.0s");
-            if(matchesFound == 8)
+            if (lastTime == 0) { 
+                bestTime.Visibility = Visibility.Hidden; 
+            }
+            if (matchesFound == 8)
             {
                 timer.Stop();
+                BestTime();
                 timeTextBlock.Text += " - Play Again? click here";
             }
+        }
+
+        private void BestTime()
+        {
+            if (tenthsOfSeconds < lastTime | lastTime == 0)
+            {
+                bestTime.Visibility = Visibility.Visible;
+                bestTime.Text = "Topscore: " + timeTextBlock.Text;
+            }
+            
+            lastTime = tenthsOfSeconds;
         }
 
         private void SetUpGame()
@@ -56,10 +73,10 @@ namespace Matchgame
                 "🦚", "🦚",
             };
             Random random = new Random();
-
+            
             foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
-                if (textBlock.Name != "timeTextBlock")
+                if (textBlock.Name != "timeTextBlock" & textBlock.Name != "bestTime")
                 {
                     textBlock.Visibility = Visibility.Visible;
                     int index = random.Next(animalEmoji.Count);
