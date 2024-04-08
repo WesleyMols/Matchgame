@@ -19,8 +19,8 @@ namespace Matchgame
         public MainWindow()
         {
             InitializeComponent();
-
             SetUpGame();
+            
         }
 
         private void SetUpGame()
@@ -44,6 +44,30 @@ namespace Matchgame
                 string nextEmoji = animalEmoji[index];
                 textBlock.Text = nextEmoji;
                 animalEmoji.RemoveAt(index);
+                
+            }
+        }
+
+        TextBlock lastTextBlockClicked;
+        Boolean isMatch = false;
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock currentTextBLockClicked = sender as TextBlock;
+            if(isMatch == false)
+            {
+                currentTextBLockClicked.Visibility = Visibility.Hidden;
+                lastTextBlockClicked = currentTextBLockClicked;
+                isMatch = true;
+            }
+            else if(currentTextBLockClicked.Text == lastTextBlockClicked.Text)
+            {
+                currentTextBLockClicked.Visibility = Visibility.Hidden;
+                isMatch = false;
+            }
+            else
+            {
+                lastTextBlockClicked.Visibility = Visibility.Visible;
+                isMatch = false;
             }
         }
     }
